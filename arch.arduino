@@ -1,0 +1,18 @@
+nba-stack/
+│── docker-compose.yml
+│── watcher/
+│     ├── Dockerfile
+│     ├── requirements.txt
+│     └── app/
+│           ├── service.py          # NBA watcher + Pushover
+│           └── api.py              # FastAPI health endpoint
+│── nginx/
+│     └── nginx.conf
+│── promtail/
+│     └── promtail-config.yml
+│── grafana/
+│     └── provisioning/
+│           └── datasources/
+│                 └── loki.yaml
+│── cloudflared/
+      └── config.yml

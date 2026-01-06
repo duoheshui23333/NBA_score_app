@@ -1,0 +1,62 @@
+version: "3.9"
+
+services:
+
+  watcher:
+    build: ./watcher
+    container_name: nba_watcher
+    environment:
+      PUSHOVER_USER_KEY: "ubcom8mjarv2i13vr15gqsm32g3f33"
+      PUSHOVER_API_TOKEN: "arxdvtqbqa9udvi4ojcv82nvharzqn"
+    volumes:
+      - ./data:/data
+    restart: always
+
+  nginx:
+    image: nginx:latest
+    container_name: nba_nginx
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - "8080:80"
+    depends_on:
+      - watcher
+    restart: always
+
+  loki:
+    image: grafana/loki:2.9.2
+    container_name: nba_loki
+    command: -config.file=/etc/loki/local-config.yaml
+    ports:
+      - "3100:3100"
+    restart: always
+
+  promtail:
+    image: grafana/promtail:2.9.2
+    container_name: nba_promtail
+    volumes:
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - ./promtail/promtail-config.yml:/etc/promtail/config.yml
+    command: -config.file=/etc/promtail/config.yml
+    depends_on:
+      - loki
+    restart: always
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: nba_grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./grafana:/etc/grafana/provisioning
+    depends_on:
+      - loki
+    restart: always
+
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: nba_cloudflared
+    command: tunnel run nba-tunnel
+    volumes:
+      - ./cloudflared:/etc/cloudflared
+    restart: always

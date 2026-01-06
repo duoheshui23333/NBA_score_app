@@ -1,0 +1,7 @@
+tunnel: nba-tunnel
+credentials-file: /etc/cloudflared/creds.json
+
+ingress:
+  - hostname: yourdomain.com
+    service: http://nginx:80
+  - service: http_status:404
