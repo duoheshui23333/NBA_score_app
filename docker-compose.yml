@@ -36,7 +36,7 @@ services:
     image: grafana/promtail:2.9.2
     container_name: nba_promtail
     volumes:
-      - ${DOCKER_CONTAINER_PATH:-/var/lib/docker/containers}:/var/lib/docker/containers:ro
+      - ${DOCKER_CONTAINER_PATH:-/var/log}:/var/lib/docker/containers:ro
       - ./promtail/promtail-config.yml:/etc/promtail/config.yml
     command: -config.file=/etc/promtail/config.yml
     depends_on:
