@@ -54,7 +54,7 @@ def watch_loop():
                     pts = leader.get("points", 0)
                     name = leader.get("name", "Unknown")
 
-                    if pts >= 50:
+                    if pts >= 40:
                         key = f"{gid}-{name}"
                         if key not in history:
                             send_push(f"{name} scored {pts}", f"{pts} points")
